@@ -1,5 +1,15 @@
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="成员名称">
+        <el-input v-model="pageInfo.queryString" placeholder="成员名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
     <el-table
       :data="tableData"
@@ -10,7 +20,7 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="communityId"
+        prop="communityName"
         label="所属小区"
         width="180">
       </el-table-column>
@@ -36,6 +46,10 @@
       <el-table-column
           prop="sex"
           label="性别">
+        <template v-slot="scope">
+          <div v-if="scope.row.sex==0">女</div>
+          <div v-else>男</div>
+        </template>
       </el-table-column>
 
       <el-table-column
@@ -43,8 +57,8 @@
           label="出生日期">
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        label="创建时间">
+        prop="updateTime"
+        label="更新时间">
       </el-table-column>
 
 
@@ -74,9 +88,16 @@
 
     <el-dialog title="新增/编辑业主人员信息" :visible.sync="dialogFormVisible" @close="resetForm()">
       <el-form :model="form" ref="formRef">
+<!--        <el-form-item label="所属小区" :label-width="formLabelWidth">-->
+<!--          <el-input v-model="form.communityId" autocomplete="off"></el-input>-->
+<!--        </el-form-item>-->
+
         <el-form-item label="所属小区" :label-width="formLabelWidth">
-          <el-input v-model="form.communityId" autocomplete="off"></el-input>
+          <el-select v-model="form.communityId" placeholder="请选择小区" >
+            <el-option v-for="(item,index) in communityNameList" :key="item.id" :label="item.communityName" :value="item.id" ></el-option>
+          </el-select>
         </el-form-item>
+
         <el-form-item label="成员名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off"></el-input>
 
@@ -91,8 +112,10 @@
         </el-form-item>
 
         <el-form-item label="性别" :label-width="formLabelWidth">
-          <el-input v-model="form.sex" autocomplete="off"></el-input>
-
+          <el-select v-model="form.sex" placeholder="请选择性别" >
+            <el-option label="男" value="1"></el-option>
+            <el-option label="女" value="0"></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="出生日期" :label-width="formLabelWidth">
@@ -111,7 +134,7 @@
 </template>
 
 <script>
-import { getList ,updateOwnerInfo,addOwner,deleteOwner} from '@/api/owner/info.js'
+import { getList ,updateOwnerInfo,addOwner,deleteOwner,getCommunityList} from '@/api/owner/info.js'
 
 export default {
   filters: {
@@ -130,6 +153,7 @@ export default {
       listLoading: false,
 
       tableData:[],
+      communityNameList:[],
       pageInfo:{
         currentPage:1,
         pageSize:5,
@@ -151,6 +175,7 @@ export default {
   },
   created() {
     // this.fetchData()
+    this.getCommunityLists();
     this.findPage();
 
   },
@@ -163,9 +188,25 @@ export default {
       })
     },
 
+    //获取所有小区的名称
+    getCommunityLists(){
+      var self = this;
+
+      getCommunityList().then(function (res) {
+        console.log('getCommunityLists',res.data)
+        self.communityNameList = res.data.map(item=>({
+          id:item.id,
+          communityName:item.name
+        }));
+
+      })
+    },
+
     getAllOwners(){
       var self = this;
+
       getList().then(function (res){
+        console.log('res=======',res)
         self.tableData = res.data
       })
     },
@@ -192,7 +233,8 @@ export default {
         queryString:this.pageInfo.queryString,
       }
       getList(param).then(function (res){
-        console.log(res);
+        console.log('findpage',res)
+
         self.tableData = res.data.records;
         self.pageInfo.total = res.data.total;
       })

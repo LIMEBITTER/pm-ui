@@ -31,3 +31,12 @@ export function deleteOwner(params) {
     data:params
   })
 }
+
+//获取社区 请求为community的controller
+export function getCommunityList() {
+  return request({
+    url: '/community/info/getCommunityList',
+    method: 'get',
+
+  })
+}

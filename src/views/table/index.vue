@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="小区名称">
+        <el-input v-model="pageInfo.queryString" placeholder="小区名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
+
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
     <el-table
       :data="tableData"

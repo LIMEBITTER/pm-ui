@@ -104,20 +104,20 @@
         },
         components:{ChinaMap},
         created(){
-            this.getData();
-            console.log('created======',this.residentTotal,this.outsiderTotal,this.normalTotal)
+            // this.getData();
+            // console.log('created======',this.residentTotal,this.outsiderTotal,this.normalTotal)
 
 
         },
         mounted() {//页面渲染完成之后触发
             //折线图
 
-            console.log('mounted======',this.residentTotal,this.outsiderTotal,this.normalTotal)
-
-            this.travelToolChart()
-            this.residentHealChart()
-            this.tempCountChart()
-            this.volAddressChart()
+            // console.log('mounted======',this.residentTotal,this.outsiderTotal,this.normalTotal)
+            //
+            // this.travelToolChart()
+            // this.residentHealChart()
+            // this.tempCountChart()
+            // this.volAddressChart()
 
 
 

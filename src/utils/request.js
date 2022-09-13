@@ -22,7 +22,8 @@ request.interceptors.request.use(config => {
         return config
     }
 
-    let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
+    let user = localStorage.getItem("role") ? JSON.parse(localStorage.getItem("role")) : null
+    console.log('request',user)
     if (user) {
         config.headers['token'] = user.token;  // 设置请求头
     }

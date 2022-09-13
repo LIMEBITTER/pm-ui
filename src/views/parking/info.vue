@@ -1,5 +1,15 @@
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="车位编号">
+        <el-input v-model="pageInfo.queryString" placeholder="车位编号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
     <el-table
       :data="tableData"
@@ -171,7 +181,7 @@ export default {
         queryString:this.pageInfo.queryString,
       }
       getPageList(param).then(function (res){
-        console.log(res);
+        console.log('parkinginfo',res);
         self.tableData = res.data.records;
         self.pageInfo.total = res.data.total;
       })

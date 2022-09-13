@@ -19,7 +19,7 @@ const routes = [
     component: ()=> import('../views/Manager.vue'),
     meta:{title:"首页",requireAuth: true},
     //  / 会重定向至/home
-    redirect:"/home",
+    redirect:"/community/table",
     children:[
       //主页界面  requireAuth 是否需要登录权限
       {path: 'home', name: 'Home', component: ()=> import('../views/Home.vue'), meta:{title:"小区疫情信息",requireAuth: true}},
@@ -46,13 +46,13 @@ const routes = [
     path: '/community',
     component: ()=> import('../views/Manager.vue'),
     name: 'table',
-    meta: { title: '小区管理', icon: 'el-icon-s-help' },
+    meta: { title: '小区管理', icon: 'el-icon-s-help' ,requireAuth: true},
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('../views/table/index.vue'),
-        meta: { title: '小区列表', icon: 'table' }
+        meta: { title: '小区列表', icon: 'table' ,requireAuth: true}
       },
 
     ]
@@ -62,19 +62,19 @@ const routes = [
     path: '/owner',
     component: ()=> import('../views/Manager.vue'),
     name: 'owner',
-    meta: { title: '业主信息管理', icon: 'el-icon-s-help' },
+    meta: { title: '业主信息管理', icon: 'el-icon-s-help' ,requireAuth: true},
     children: [
       {
         path: 'info',
         name: 'Info',
         component: () => import('../views/owner/info.vue'),
-        meta: { title: '人员管理', icon: 'table' }
+        meta: { title: '人员管理', icon: 'table' ,requireAuth: true}
       },
       {
         path: 'car',
         name: 'Car',
         component: () => import('../views/owner/car.vue'),
-        meta: { title: '车辆管理', icon: 'table' }
+        meta: { title: '车辆管理', icon: 'table',requireAuth: true }
       },
 
     ]
@@ -84,13 +84,13 @@ const routes = [
     path: '/parking',
     component: ()=> import('../views/Manager.vue'),
     name: 'table',
-    meta: { title: '停车位管理', icon: 'el-icon-s-help' },
+    meta: { title: '停车位管理', icon: 'el-icon-s-help',requireAuth: true },
     children: [
       {
         path: 'info',
         name: 'Info',
         component: () => import('../views/parking/info.vue'),
-        meta: { title: '车位管理', icon: 'table' }
+        meta: { title: '车位管理', icon: 'table' ,requireAuth: true}
       },
 
     ]
@@ -99,19 +99,25 @@ const routes = [
     path: '/property',
     component: ()=> import('../views/Manager.vue'),
     name: 'table',
-    meta: { title: '服务管理', icon: 'el-icon-s-help' },
+    meta: { title: '服务管理', icon: 'el-icon-s-help',requireAuth: true },
     children: [
       {
         path: 'activity',
         name: 'Activity',
         component: () => import('../views/property/activity.vue'),
-        meta: { title: '活动管理', icon: 'table' }
+        meta: { title: '活动管理', icon: 'table',requireAuth: true }
       },
       {
         path: 'complaint',
         name: 'Complaint',
         component: () => import('../views/property/complaint.vue'),
-        meta: { title: '投诉管理', icon: 'table' }
+        meta: { title: '投诉管理', icon: 'table' ,requireAuth: true}
+      },
+      {
+        path: 'complaintUser',
+        name: 'ComplaintUser',
+        component: () => import('../views/user/complaintInfo.vue'),
+        meta: { title: '我要投诉', icon: 'table' ,requireAuth: true}
       },
     ]
   },
@@ -144,16 +150,19 @@ const router = new VueRouter({
 
 //路由守卫
 router.beforeEach((to, from, next) => {
-  // document.title = i18n.t("router." + to.name)
-  //单语言项目 实现动态标题
-  // let token = localStorage.getItem("user")
-    let token = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+
+  let token = localStorage.getItem("role")
 
   console.log('token',JSON.stringify(token))
   console.log('beforeEach',to,from)
   document.title = to.meta.title
+  console.log(to.meta.requireAuth)
   if (to.meta.requireAuth) { // 判断跳转的路由是否需要登录
-    if (token) { // vuex.state判断token是否存在
+    console.log('=======是否需要登录========',to.meta.requireAuth)
+
+    if (token!=null) { // vuex.state判断token是否存在
+      console.log('=======路由守卫1====',token)
+
       next() // 已登录
       if (to.path.includes('admin')){
         console.log('进入admin',)

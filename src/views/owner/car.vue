@@ -1,5 +1,16 @@
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="车牌号">
+        <el-input v-model="pageInfo.queryString" placeholder="车牌号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
+
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
     <el-table
       :data="tableData"
@@ -15,7 +26,7 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="ownerId"
+        prop="ownerName"
         label="所属成员（业主）">
       </el-table-column>
       <el-table-column
@@ -65,9 +76,14 @@
 
     <el-dialog title="新增/编辑业主人员信息" :visible.sync="dialogFormVisible" @close="resetForm()">
       <el-form :model="form" ref="formRef">
+
         <el-form-item label="所属成员（业主）" :label-width="formLabelWidth">
-          <el-input v-model="form.ownerId" autocomplete="off"></el-input>
+          <el-select v-model="form.ownerId" placeholder="请选择业主" >
+            <el-option v-for="(item,index) in ownerNameList" :key="item.id" :label="item.ownerName" :value="item.id" ></el-option>
+          </el-select>
         </el-form-item>
+
+
         <el-form-item label="车辆颜色" :label-width="formLabelWidth">
           <el-input v-model="form.color" autocomplete="off"></el-input>
 
@@ -91,7 +107,8 @@
 </template>
 
 <script>
-import { getPageList ,updateCar,addCar,deleteCar} from '@/api/owner/car.js'
+import { getPageList ,updateCar,addCar,deleteCar,getOwnerList} from '@/api/owner/car.js'
+import {getCommunityList} from "@/api/owner/info";
 
 export default {
   filters: {
@@ -110,6 +127,7 @@ export default {
       listLoading: false,
 
       tableData:[],
+      ownerNameList:[],
       pageInfo:{
         currentPage:1,
         pageSize:5,
@@ -130,6 +148,7 @@ export default {
   },
   created() {
     // this.fetchData()
+    this.getOwnerLists();
     this.findPage();
 
   },
@@ -148,6 +167,23 @@ export default {
         self.tableData = res.data
       })
     },
+
+
+    //获取所有小区的名称
+    getOwnerLists(){
+      var self = this;
+
+      getOwnerList().then(function (res) {
+        console.log('getOwnerLists',res.data)
+        self.ownerNameList = res.data.map(item=>({
+          id:item.id,
+          ownerName:item.name
+        }));
+
+      })
+    },
+
+
     // 每页显示条数
     handleSizeChange(pageSize){
       //更新参数值
@@ -171,7 +207,7 @@ export default {
         queryString:this.pageInfo.queryString,
       }
       getPageList(param).then(function (res){
-        console.log(res);
+        console.log('=====car',res);
         self.tableData = res.data.records;
         self.pageInfo.total = res.data.total;
       })

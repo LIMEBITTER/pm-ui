@@ -5,10 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "dev": "vue-cli-service serve --open",
-
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@antv/g2plot": "^2.4.16",
     "aliyun-api-gateway": "^1.1.6",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
@@ -18,11 +18,11 @@
     "jsonp": "^0.2.1",
     "sass": "1.26.8",
     "sass-loader": "8.0.2",
+    "stompjs": "^2.3.3",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.6.2",
-    "xlsx": "^0.18.5",
-    "@antv/g2plot": "^2.4.16"
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.13",

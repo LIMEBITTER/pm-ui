@@ -1,6 +1,18 @@
 <template>
   <div class="app-container">
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
+
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="活动标题">
+        <el-input v-model="pageInfo.queryString" placeholder="活动标题"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
+
     <el-table
       :data="tableData"
       style="width: 100%">

@@ -31,3 +31,12 @@ export function deleteCar(params) {
     data:params
   })
 }
+
+//获取业主信息 请求为owner的controller
+export function getOwnerList() {
+  return request({
+    url: '/owner/info/getOwnerList',
+    method: 'get',
+
+  })
+}

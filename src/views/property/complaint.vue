@@ -1,5 +1,15 @@
 <template>
   <div class="app-container">
+
+    <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
+      <el-form-item label="投诉名称">
+        <el-input v-model="pageInfo.queryString" placeholder="投诉名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="this.findPage">查询</el-button>
+      </el-form-item>
+    </el-form>
+
     <el-button type="primary" @click="handleCreate()">新增角色</el-button>
     <el-table
       :data="tableData"
@@ -28,13 +38,27 @@
         label="投诉事由">
       </el-table-column>
 
+
       <el-table-column
           prop="status"
           label="状态">
+        <template v-slot="scope">
+          <div v-if="scope.row.status==0">未受理</div>
+          <div v-else-if="scope.row.status==1">已受理</div>
+          <div v-else>已回复</div>
+
+        </template>
       </el-table-column>
 
+
       <el-table-column
-        prop="createTime"
+          prop="answer"
+          label="回复">
+      </el-table-column>
+
+
+      <el-table-column
+        prop="updateTime"
         label="创建时间">
       </el-table-column>
 
@@ -44,7 +68,13 @@
           <el-button
             size="mini"
             type="primary"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            v-if="scope.row.status==0"
+            @click="resolveEvent(scope.$index, scope.row)">受理</el-button>
+          <el-button
+              size="mini"
+              type="primary"
+              v-if="scope.row.status==1"
+              @click="showDialog(scope.$index, scope.row)">回复</el-button>
           <el-button
             size="mini"
             type="danger"
@@ -63,28 +93,17 @@
       :total="pageInfo.total">
     </el-pagination>
 
-    <el-dialog title="新增/编辑投诉信息" :visible.sync="dialogFormVisible" @close="resetForm()">
-      <el-form :model="form" ref="formRef">
-        <el-form-item label="所属小区名称" :label-width="formLabelWidth">
-          <el-input v-model="form.communityName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="投诉人员（业主）" :label-width="formLabelWidth">
-          <el-input v-model="form.ownerName" autocomplete="off"></el-input>
+    <el-dialog title="投诉答复" :visible.sync="dialogFormVisible" @close="resetForm()">
+      <el-form :model="asr" ref="formRef">
 
-        </el-form-item>
-        <el-form-item label="投诉名称" :label-width="formLabelWidth">
-          <el-input v-model="form.descriptionName" autocomplete="off"></el-input>
-
-        </el-form-item>
-        <el-form-item label="投诉事由" :label-width="formLabelWidth">
-          <el-input v-model="form.reason" autocomplete="off"></el-input>
-
+        <el-form-item label="投诉答复" :label-width="formLabelWidth">
+          <el-input v-model="asr.answer" autocomplete="off"></el-input>
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmit()">保 存</el-button>
+        <el-button type="primary" @click="giveAnswer()">保 存</el-button>
       </div>
     </el-dialog>
   </div>
@@ -117,13 +136,18 @@ export default {
         total:0
       },
       form:{
-        id:'',
-        communityName: '',
-        ownerName:'',
-        descriptionName:'',
-        reason:'',
-        status:0,
+        // id:'',
+        // communityName: '',
+        // ownerName:'',
+        // descriptionName:'',
+        // reason:'',
+        // status:0,
+        // answer: ''
       },
+      asr:{
+        answer:'',
+      },
+
       dialogFormVisible:false,
       formLabelWidth: '120px'
     }
@@ -162,6 +186,12 @@ export default {
       this.findPage()
 
     },
+
+    showDialog(index,row){
+      this.form=row
+      this.dialogFormVisible = true;
+    },
+
     findPage(){
       //向后台传递数据
       var self = this;
@@ -171,7 +201,7 @@ export default {
         queryString:this.pageInfo.queryString,
       }
       getPageList(param).then(function (res){
-        console.log(res);
+        console.log('=======getPageList======',res);
         self.tableData = res.data.records;
         self.pageInfo.total = res.data.total;
       })
@@ -180,75 +210,85 @@ export default {
     handleCreate(){
       this.dialogFormVisible = true;
     },
-    onSubmit(){
-      let self = this;
-      //判断form数据模型里id有没有值
-      console.log('新增/修改按钮==========',self.form.id)
-      if (self.form.id==undefined){
-        console.log('=========undefined=========')
-        self.form.id='';
-      }
-      if (self.form.id!=''){
-        //不为空，id有值，进行修改操作
-        var param={
-          id:this.form.id,
-          communityName: this.form.communityName,
-          ownerName:this.form.ownerName,
-          descriptionName:this.form.descriptionName,
-          reason:this.form.reason,
-          status:this.form.status,
-        }
-        updateComplaint(param).then(function (res){
-          //更新数据操作
-          self.findPage();
-          //关闭弹层
-          self.dialogFormVisible = false;
-          //重置表单数据
-          self.form={};
-          if(res.code==20000){
-            self.$message({
-              message: '恭喜你，修改投诉信息成功',
-              type: 'success'
-            });
-          }else{
-            self.$message.error('错了哦，修改投诉信息失败');
-
-          }
-        })
-      }else{
-        //得到form表单内容，封装为一个新的对象，传递到controller层
-        var param={
-          communityName: this.form.communityName,
-          ownerName:this.form.ownerName,
-          descriptionName:this.form.descriptionName,
-          reason:this.form.reason,
-          status:this.form.status,
-        }
-        addComplaint(param).then(function (res){
-          //更新数据操作
-          self.findPage();
-          //关闭弹层
-          self.dialogFormVisible = false;
-          if(res.code==20000){
-            self.$message({
-              message: '恭喜你，添加投诉成功',
-              type: 'success'
-            });
-          }else{
-            self.$message.error('错了哦，添加投诉失败');
-
-          }
-        })
-      }
-
-    },
-
-    handleEdit(index, row) {
+    //受理，状态status为1
+    resolveEvent(index, row) {
       // alert(index, row);
       this.form = row
-      this.dialogFormVisible = true;
+      // this.dialogFormVisible = true;
+      console.log('========resolveEvent========',this.tableData)
+      let self = this;
+
+      var param={
+        id:this.form.id,
+        communityName: this.form.communityName,
+        ownerName:this.form.ownerName,
+        descriptionName:this.form.descriptionName,
+        reason:this.form.reason,
+        status:1,
+      }
+      console.log('===========',param)
+      updateComplaint(param).then(function (res){
+        //更新数据操作
+        self.findPage();
+
+        console.log('============成功===============',self.tableData)
+        //关闭弹层
+        // self.dialogFormVisible = false;
+        //重置表单数据
+        // self.form={};
+        if(res.code==20000){
+          self.$message({
+            message: '恭喜你，受理信息成功',
+            type: 'success'
+          });
+        }else{
+          self.$message.error('错了哦，受理投诉信息失败');
+
+        }
+      })
+
+
 
     },
+
+    giveAnswer(index,row){
+      // alert(index, row);
+      // this.form = row
+      // this.dialogFormVisible = true;
+      console.log('========giveAnswer========',this.form)
+      let self = this;
+
+      var param={
+        id:this.form.id,
+        answer:this.asr.answer,
+        status:2,
+      }
+
+      console.log('=====454353453======',param)
+      updateComplaint(param).then(function (res){
+        //更新数据操作
+        self.findPage();
+
+        console.log('============成功===============',self.tableData)
+        //关闭弹层
+        self.dialogFormVisible = false;
+        //重置表单数据
+        self.form={};
+        if(res.code==20000){
+          self.$message({
+            message: '恭喜你，受理信息成功',
+            type: 'success'
+          });
+        }else{
+          self.$message.error('错了哦，受理投诉信息失败');
+
+        }
+      })
+
+
+
+    },
+
     handleDelete(index, row) {
       let self = this;
 

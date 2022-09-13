@@ -11,7 +11,7 @@
     >
         <div style="height: 60px; line-height: 60px; text-align: center">
 <!--            <img src="../assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px; right: 5px">-->
-            <b style="color: white" v-show="logoTextShow">小区疫情管理系统</b>
+            <b style="color: white" v-show="logoTextShow">物业管理系统</b>
         </div>
 
         <el-submenu index="1">
@@ -68,6 +68,10 @@
         <el-menu-item index="/property/complaint">
           <i class="el-icon-s-custom"></i>
           <span slot="title">投诉管理</span>
+        </el-menu-item>
+        <el-menu-item index="/property/complaintUser">
+          <i class="el-icon-s-custom"></i>
+          <span slot="title">我要投诉</span>
         </el-menu-item>
       </el-submenu>
 
