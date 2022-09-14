@@ -38,6 +38,15 @@
         label="联系方式">
       </el-table-column>
 
+      <el-table-column
+          prop="status"
+          label="状态">
+        <template v-slot="scope">
+          <div v-if="scope.row.status==0">待审核</div>
+          <div v-else-if="scope.row.status==1">已审核</div>
+        </template>
+      </el-table-column>
+
 <!--      <el-table-column-->
 <!--          prop="profession"-->
 <!--          label="职业">-->
@@ -65,9 +74,11 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              size="mini"
+              type="primary"
+              v-if="scope.row.status==0"
+              @click="resolveEvent(scope.$index, scope.row)">审核</el-button>
+
           <el-button
             size="mini"
             type="danger"
@@ -135,6 +146,7 @@
 
 <script>
 import { getList ,updateOwnerInfo,addOwner,deleteOwner,getCommunityList} from '@/api/owner/info.js'
+import {updateComplaint} from "@/api/property/complaint";
 
 export default {
   filters: {
@@ -187,6 +199,51 @@ export default {
         this.listLoading = false
       })
     },
+
+
+    //受理，状态status为1
+    resolveEvent(index, row) {
+      // alert(index, row);
+      this.form = row
+      // this.dialogFormVisible = true;
+      console.log('========resolveEvent========',this.tableData)
+      let self = this;
+
+      var param={
+        id:this.form.id,
+        communityId: this.form.communityId,
+        name:this.form.name,
+        idCard:this.form.idCard,
+        telephone:this.form.telephone,
+        sex:this.form.sex,
+        birthday:this.birthday,
+        status:1,
+      }
+      console.log('===========',param)
+      updateOwnerInfo(param).then(function (res){
+        //更新数据操作
+        self.findPage();
+
+        console.log('============成功===============',self.tableData)
+        //关闭弹层
+        // self.dialogFormVisible = false;
+        //重置表单数据
+        // self.form={};
+        if(res.code==20000){
+          self.$message({
+            message: '恭喜你，审核成功',
+            type: 'success'
+          });
+        }else{
+          self.$message.error('错了哦，审核信息失败');
+
+        }
+      })
+
+
+
+    },
+
 
     //获取所有小区的名称
     getCommunityLists(){

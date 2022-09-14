@@ -30,16 +30,16 @@ const routes = [
     ]
   },
 
-  {
-    path:'/admin',
-    name:'Admin',
-    component: ()=> import('../views/Manager.vue'),
-    meta:{title:"管理",requireAuth: true},
-    redirect: "admin/user",
-    children:[
-      // {path: 'user', name: 'User', component: ()=> import('../views/User.vue'), meta:{title:"后台管理人员信息",requireAuth: true}},
-    ]
-  },
+  // {
+  //   path:'/admin',
+  //   name:'Admin',
+  //   component: ()=> import('../views/Manager.vue'),
+  //   meta:{title:"管理",requireAuth: true},
+  //   redirect: "admin/user",
+  //   children:[
+  //     // {path: 'user', name: 'User', component: ()=> import('../views/User.vue'), meta:{title:"后台管理人员信息",requireAuth: true}},
+  //   ]
+  // },
 
 
   {
@@ -121,9 +121,6 @@ const routes = [
       },
     ]
   },
-
-
-
 
   //登录页面
   {

@@ -75,21 +75,32 @@
         </el-menu-item>
       </el-submenu>
 
+<!--      <el-submenu index="5" >-->
+<!--        <template slot="title">-->
+<!--          <i class="el-icon-menu"></i>-->
+<!--          <span slot="title">管理员管理</span>-->
+<!--        </template>-->
+
+<!--        <el-menu-item index="/admin/resident">-->
+<!--          <i class="el-icon-s-custom"></i>-->
+<!--          <span slot="title">管理员列表</span>-->
+<!--        </el-menu-item>-->
+
+<!--      </el-submenu>-->
+
+
       <el-submenu index="5" >
         <template slot="title">
           <i class="el-icon-menu"></i>
-          <span slot="title">管理员管理</span>
+          <span slot="title">个人管理</span>
         </template>
 
-        <el-menu-item index="/admin/resident">
+        <el-menu-item index="/person/info">
           <i class="el-icon-s-custom"></i>
-          <span slot="title">管理员列表</span>
+          <span slot="title">个人信息管理</span>
         </el-menu-item>
 
       </el-submenu>
-
-
-
 
 
 
@@ -103,7 +114,7 @@
         name: "Aside",
         data(){
             return{
-                user_role: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+                user_role: localStorage.getItem("role") ? JSON.parse(localStorage.getItem("role")) : {},
 
             }
         },

@@ -21,17 +21,18 @@
       </el-table-column>
       <el-table-column
         prop="communityName"
-        label="所属小区名称"
+        label="所属小区"
         width="180">
       </el-table-column>
-      <el-table-column
-        prop="ownerId"
-        label="所属成员（业主）">
-      </el-table-column>
-      <el-table-column
-        prop="picture"
-        label="车位图片">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="ownerName"-->
+<!--        label="正在使用的业主">-->
+
+<!--      </el-table-column>-->
+<!--      <el-table-column-->
+<!--        prop="picture"-->
+<!--        label="车位图片">-->
+<!--      </el-table-column>-->
 
       <el-table-column
         prop="code"
@@ -41,6 +42,16 @@
       <el-table-column
           prop="name"
           label="车位名称">
+      </el-table-column>
+
+      <el-table-column
+          prop="status"
+          label="状态">
+        <template v-slot="scope">
+          <div v-if="scope.row.status==0">未使用</div>
+          <div v-else>正在使用</div>
+
+        </template>
       </el-table-column>
 
       <el-table-column
@@ -56,9 +67,14 @@
             type="primary"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
           <el-button
+              size="mini"
+              type="primary"
+              @click="showDetail(scope.$index, scope.row)">详情</el-button>
+          <el-button
             size="mini"
             type="danger"
             @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -75,13 +91,15 @@
 
     <el-dialog title="新增/编辑停车位信息" :visible.sync="dialogFormVisible" @close="resetForm()">
       <el-form :model="form" ref="formRef">
-        <el-form-item label="所属小区名称" :label-width="formLabelWidth">
-          <el-input v-model="form.communityName" autocomplete="off"></el-input>
+        <el-form-item label="所属小区" :label-width="formLabelWidth">
+          <el-select v-model="form.communityId" placeholder="请选择小区" >
+            <el-option v-for="(item,index) in communityNameList" :key="item.id" :label="item.communityName" :value="item.id" ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="车位图片" :label-width="formLabelWidth">
-          <el-input v-model="form.picture" autocomplete="off"></el-input>
+<!--        <el-form-item label="车位图片" :label-width="formLabelWidth">-->
+<!--          <el-input v-model="form.picture" autocomplete="off"></el-input>-->
 
-        </el-form-item>
+<!--        </el-form-item>-->
         <el-form-item label="车位编号" :label-width="formLabelWidth">
           <el-input v-model="form.code" autocomplete="off"></el-input>
 
@@ -102,6 +120,7 @@
 
 <script>
 import { getPageList ,updateParkingInfo,addParking,deleteParking} from '@/api/parking/info.js'
+import {getCommunityList} from "@/api/owner/info.js";
 
 export default {
   filters: {
@@ -120,6 +139,7 @@ export default {
       listLoading: false,
 
       tableData:[],
+      communityNameList:[],
       pageInfo:{
         currentPage:1,
         pageSize:5,
@@ -130,7 +150,7 @@ export default {
         id:'',
         communityName: '',
         communityId:0,
-        picture:'',
+        // picture:'',
         code:'',
         name:'',
       },
@@ -140,6 +160,7 @@ export default {
   },
   created() {
     // this.fetchData()
+    this.getCommunityLists();
     this.findPage();
 
   },
@@ -151,6 +172,28 @@ export default {
         this.listLoading = false
       })
     },
+    showDetail(index,row){
+      console.log('详情信息',index,row)
+      if (row.ownerName!=-1){
+        this.$message.success("正在使用的业主是： "+row.ownerName)
+      }else {
+        this.$message.info("该车位未被使用！")
+      }
+    },
+    //获取所有小区的名称
+    getCommunityLists(){
+      var self = this;
+
+      getCommunityList().then(function (res) {
+        console.log('getCommunityLists',res.data)
+        self.communityNameList = res.data.map(item=>({
+          id:item.id,
+          communityName:item.name
+        }));
+
+      })
+    },
+
 
     getAllOwners(){
       var self = this;
@@ -200,11 +243,11 @@ export default {
       }
       if (self.form.id!=''){
         //不为空，id有值，进行修改操作
+        console.log('=========修改==========')
         var param={
           id:this.form.id,
-          communityName: this.form.communityName,
           communityId:this.form.communityId,
-          picture:this.form.picture,
+          // picture:this.form.picture,
           code:this.form.code,
           name:this.form.name,
         }
@@ -228,9 +271,11 @@ export default {
       }else{
         //得到form表单内容，封装为一个新的对象，传递到controller层
         var param={
-          communityName: this.form.communityName,
           communityId:this.form.communityId,
-          picture:this.form.picture,
+          //默认停车位未被使用
+          ownerId: -1,
+          status:0,
+          // picture:this.form.picture,
           code:this.form.code,
           name:this.form.name,
         }

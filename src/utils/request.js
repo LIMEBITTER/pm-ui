@@ -27,6 +27,7 @@ request.interceptors.request.use(config => {
     if (user) {
         config.headers['token'] = user.token;  // 设置请求头
     }
+    console.log('==========',config)
 
     return config
 }, error => {

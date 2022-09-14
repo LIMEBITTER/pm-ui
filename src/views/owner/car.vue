@@ -174,7 +174,7 @@ export default {
       var self = this;
 
       getOwnerList().then(function (res) {
-        console.log('getOwnerLists',res.data)
+        console.log('getOwnerLists',res)
         self.ownerNameList = res.data.map(item=>({
           id:item.id,
           ownerName:item.name
