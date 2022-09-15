@@ -76,7 +76,12 @@ const routes = [
         component: () => import('../views/owner/car.vue'),
         meta: { title: '车辆管理', icon: 'table',requireAuth: true }
       },
-
+      {
+        path: 'role',
+        name: 'Role',
+        component: () => import('../views/role/owner-role.vue'),
+        meta: { title: '注册用户管理', icon: 'table',requireAuth: true }
+      },
     ]
   },
 

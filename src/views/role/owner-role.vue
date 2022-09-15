@@ -19,52 +19,31 @@
         label="id"
         width="180">
       </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="communityName"-->
+<!--        label="所属小区"-->
+<!--        width="180">-->
+<!--      </el-table-column>-->
       <el-table-column
-        prop="communityName"
-        label="所属小区"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="成员名称">
-      </el-table-column>
-      <el-table-column
-        prop="idCard"
-        label="身份证号">
-      </el-table-column>
-
-      <el-table-column
-        prop="telephone"
-        label="联系方式">
+        prop="userName"
+        label="用户名">
       </el-table-column>
 
       <el-table-column
           prop="status"
           label="状态">
         <template v-slot="scope">
-          <div v-if="scope.row.status==2">待审核</div>
-          <div v-else-if="scope.row.status==3">已审核</div>
+          <div v-if="scope.row.status==0">待审核</div>
+          <div v-else-if="scope.row.status==1">已审核</div>
         </template>
       </el-table-column>
 
-<!--      <el-table-column-->
-<!--          prop="profession"-->
-<!--          label="职业">-->
-<!--      </el-table-column>-->
 
       <el-table-column
-          prop="sex"
-          label="性别">
-        <template v-slot="scope">
-          <div v-if="scope.row.sex==0">女</div>
-          <div v-else>男</div>
-        </template>
+          prop="createTime"
+          label="注册时间">
       </el-table-column>
 
-      <el-table-column
-          prop="birthday"
-          label="出生日期">
-      </el-table-column>
       <el-table-column
         prop="updateTime"
         label="更新时间">
@@ -76,7 +55,7 @@
           <el-button
               size="mini"
               type="primary"
-              v-if="scope.row.status==2"
+              v-if="scope.row.status==0"
               @click="resolveEvent(scope.$index, scope.row)">审核</el-button>
 
           <el-button
@@ -145,8 +124,7 @@
 </template>
 
 <script>
-import { getList ,updateOwnerInfo,addOwner,deleteOwner,getCommunityList} from '@/api/owner/info.js'
-import {updateComplaint} from "@/api/property/complaint";
+import {getList,updateOwnerRole,addOwnerRole,deleteOwnerRole} from '@/api/owner/role.js'
 
 export default {
   filters: {
@@ -174,12 +152,7 @@ export default {
       },
       form:{
         id:'',
-        communityId: '',
-        name:'',
-        idCard:'',
-        telephone:'',
-        sex:0,
-        birthday:Date,
+        userName:'',
       },
       dialogFormVisible:false,
       formLabelWidth: '120px'
@@ -187,7 +160,7 @@ export default {
   },
   created() {
     // this.fetchData()
-    this.getCommunityLists();
+    // this.getCommunityLists();
     this.findPage();
 
   },
@@ -201,7 +174,7 @@ export default {
     },
 
 
-    //受理，状态status为3
+    //受理，状态status为1
     resolveEvent(index, row) {
       // alert(index, row);
       this.form = row
@@ -211,31 +184,23 @@ export default {
 
       var param={
         id:this.form.id,
-        communityId: this.form.communityId,
-        name:this.form.name,
-        idCard:this.form.idCard,
-        telephone:this.form.telephone,
-        sex:this.form.sex,
-        birthday:this.birthday,
-        status:3,
+        userName: this.form.userName,
+        status:1
       }
       console.log('===========',param)
-      updateOwnerInfo(param).then(function (res){
+      updateOwnerRole(param).then(function (res){
         //更新数据操作
         self.findPage();
 
         console.log('============成功===============',self.tableData)
-        //关闭弹层
-        // self.dialogFormVisible = false;
-        //重置表单数据
-        // self.form={};
+
         if(res.code==20000){
           self.$message({
             message: '恭喜你，审核成功',
             type: 'success'
           });
         }else{
-          self.$message.error('错了哦，审核信息失败');
+          self.$message.error('错了哦，审核失败');
 
         }
       })
@@ -244,29 +209,6 @@ export default {
 
     },
 
-
-    //获取所有小区的名称
-    getCommunityLists(){
-      var self = this;
-
-      getCommunityList().then(function (res) {
-        console.log('getCommunityLists',res.data)
-        self.communityNameList = res.data.map(item=>({
-          id:item.id,
-          communityName:item.name
-        }));
-
-      })
-    },
-
-    getAllOwners(){
-      var self = this;
-
-      getList().then(function (res){
-        console.log('res=======',res)
-        self.tableData = res.data
-      })
-    },
     // 每页显示条数
     handleSizeChange(pageSize){
       //更新参数值
@@ -290,7 +232,7 @@ export default {
         queryString:this.pageInfo.queryString,
       }
       getList(param).then(function (res){
-        console.log('findpage',res)
+        console.log('findpage=========',res)
 
         self.tableData = res.data.records;
         self.pageInfo.total = res.data.total;
@@ -312,14 +254,10 @@ export default {
         //不为空，id有值，进行修改操作
         var param={
           id:this.form.id,
-          communityId: this.form.communityId,
-          name:this.form.name,
-          idCard:this.form.idCard,
-          telephone:this.form.telephone,
-          sex:this.form.sex,
-          birthday:this.birthday,
+          userName:this.form.userName
+
         }
-        updateOwnerInfo(param).then(function (res){
+        updateOwnerRole(param).then(function (res){
           //更新数据操作
           self.findPage();
           //关闭弹层
@@ -341,23 +279,20 @@ export default {
         var param={
           communityId: this.form.communityId,
           name:this.form.name,
-          idCard:this.form.idCard,
-          telephone:this.form.telephone,
-          sex:this.form.sex,
-          birthday:this.form.birthday,
+
         }
-        addOwner(param).then(function (res){
+        addOwnerRole(param).then(function (res){
           //更新数据操作
           self.findPage();
           //关闭弹层
           self.dialogFormVisible = false;
           if(res.code==20000){
             self.$message({
-              message: '恭喜你，添加业主成功',
+              message: '恭喜你，添加用户成功',
               type: 'success'
             });
           }else{
-            self.$message.error('错了哦，添加业主失败');
+            self.$message.error('错了哦，添加用户失败');
 
           }
         })
@@ -374,16 +309,16 @@ export default {
     handleDelete(index, row) {
       let self = this;
       // alert(index, row);
-      deleteOwner(row.id).then(function (res){
+      deleteOwnerRole(row.id).then(function (res){
         //刷新数据
         self.findPage();
         if (res.code==20000){
           self.$message({
-            message: '删除业主成功',
+            message: '删除用户成功',
             type: 'success'
           });
         }else{
-          self.$message.error('删除业主失败');
+          self.$message.error('删除用户失败');
         }
 
       })
