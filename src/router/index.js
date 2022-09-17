@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from "../store"
 // import i18n from './i18n/index';
 
 Vue.use(VueRouter)
@@ -22,7 +21,7 @@ const routes = [
     redirect:"/community/table",
     children:[
       //主页界面  requireAuth 是否需要登录权限
-      {path: 'home', name: 'Home', component: ()=> import('../views/Home.vue'), meta:{title:"小区疫情信息",requireAuth: true}},
+      // {path: 'home', name: 'Home', component: ()=> import('../views/Home.vue'), meta:{title:"小区疫情信息",requireAuth: true}},
         //个人信息界面
       // {path: 'person', name: 'Person', component: ()=> import('../views/Person.vue'), meta:{title:"用户信息",requireAuth: true}},
 
@@ -106,12 +105,12 @@ const routes = [
     name: 'table',
     meta: { title: '服务管理', icon: 'el-icon-s-help',requireAuth: true },
     children: [
-      {
-        path: 'activity',
-        name: 'Activity',
-        component: () => import('../views/property/activity.vue'),
-        meta: { title: '活动管理', icon: 'table',requireAuth: true }
-      },
+      // {
+      //   path: 'activity',
+      //   name: 'Activity',
+      //   component: () => import('../views/property/activity.vue'),
+      //   meta: { title: '活动管理', icon: 'table',requireAuth: true }
+      // },
       {
         path: 'complaint',
         name: 'Complaint',
@@ -119,11 +118,17 @@ const routes = [
         meta: { title: '投诉管理', icon: 'table' ,requireAuth: true}
       },
       {
-        path: 'complaintUser',
-        name: 'ComplaintUser',
-        component: () => import('../views/user/complaintInfo.vue'),
-        meta: { title: '我要投诉', icon: 'table' ,requireAuth: true}
+        path: 'chat',
+        name: 'Chat',
+        component: () => import('../views/property/chat.vue'),
+        meta: { title: '在线对话', icon: 'table' ,requireAuth: true}
       },
+      // {
+      //   path: 'complaintUser',
+      //   name: 'ComplaintUser',
+      //   component: () => import('../views/user/complaintInfo.vue'),
+      //   meta: { title: '我要投诉', icon: 'table' ,requireAuth: true}
+      // },
     ]
   },
 
@@ -157,7 +162,7 @@ router.beforeEach((to, from, next) => {
 
   console.log('token',JSON.stringify(token))
   console.log('beforeEach',to,from)
-  document.title = to.meta.title
+  // document.title = to.meta.title
   console.log(to.meta.requireAuth)
   if (to.meta.requireAuth) { // 判断跳转的路由是否需要登录
     console.log('=======是否需要登录========',to.meta.requireAuth)

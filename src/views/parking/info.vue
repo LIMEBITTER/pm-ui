@@ -19,11 +19,11 @@
         label="id"
         width="180">
       </el-table-column>
-      <el-table-column
-        prop="communityName"
-        label="所属小区"
-        width="180">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="communityName"-->
+<!--        label="所属小区"-->
+<!--        width="180">-->
+<!--      </el-table-column>-->
 <!--      <el-table-column-->
 <!--        prop="ownerName"-->
 <!--        label="正在使用的业主">-->
@@ -55,8 +55,23 @@
       </el-table-column>
 
       <el-table-column
-        prop="createTime"
-        label="创建时间">
+        prop="updateTime"
+        label="更新时间">
+      </el-table-column>
+
+      <el-table-column
+          prop="carNumber"
+          label="车牌号">
+      </el-table-column>
+
+      <el-table-column
+          prop="color"
+          label="车身颜色">
+      </el-table-column>
+
+      <el-table-column
+          prop="remark"
+          label="备注">
       </el-table-column>
 
 
@@ -66,10 +81,10 @@
             size="mini"
             type="primary"
             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-              size="mini"
-              type="primary"
-              @click="showDetail(scope.$index, scope.row)">详情</el-button>
+<!--          <el-button-->
+<!--              size="mini"-->
+<!--              type="primary"-->
+<!--              @click="showDetail(scope.$index, scope.row)">详情</el-button>-->
           <el-button
             size="mini"
             type="danger"
@@ -174,8 +189,8 @@ export default {
     },
     showDetail(index,row){
       console.log('详情信息',index,row)
-      if (row.ownerName!=-1){
-        this.$message.success("正在使用的业主是： "+row.ownerName)
+      if (row.carNumber!=''){
+        this.$message.success("该车位正被使用！")
       }else {
         this.$message.info("该车位未被使用！")
       }

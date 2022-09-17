@@ -8,7 +8,6 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@antv/g2plot": "^2.4.16",
     "aliyun-api-gateway": "^1.1.6",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",

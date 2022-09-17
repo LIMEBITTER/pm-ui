@@ -1,7 +1,7 @@
 <!--导航菜单-->
 <template>
     <!--router 模式：转至子项路由-->
-    <el-menu :default-openeds="['1', '3']" style="min-height: 100%; overflow-x: hidden"
+    <el-menu :default-openeds="['1', '2','3','4','5']" style="min-height: 100%; overflow-x: hidden"
              background-color="rgb(48, 65, 86)"
              text-color="#fff"
              active-text-color="#ffd04b"
@@ -35,10 +35,10 @@
                     <i class="el-icon-s-custom"></i>
                     <span slot="title">人员管理</span>
                 </el-menu-item>
-                <el-menu-item index="/owner/car">
-                    <i class="el-icon-s-custom"></i>
-                    <span slot="title">车辆管理</span>
-                </el-menu-item>
+<!--                <el-menu-item index="/owner/car">-->
+<!--                    <i class="el-icon-s-custom"></i>-->
+<!--                    <span slot="title">车辆管理</span>-->
+<!--                </el-menu-item>-->
         </el-submenu>
 
 
@@ -61,18 +61,24 @@
           <span slot="title">服务管理</span>
         </template>
 
-        <el-menu-item index="/property/activity">
-          <i class="el-icon-s-custom"></i>
-          <span slot="title">活动管理</span>
-        </el-menu-item>
+<!--        <el-menu-item index="/property/activity">-->
+<!--          <i class="el-icon-s-custom"></i>-->
+<!--          <span slot="title">活动管理</span>-->
+<!--        </el-menu-item>-->
         <el-menu-item index="/property/complaint">
           <i class="el-icon-s-custom"></i>
           <span slot="title">投诉管理</span>
         </el-menu-item>
-        <el-menu-item index="/property/complaintUser">
+
+        <el-menu-item index="/property/chat">
           <i class="el-icon-s-custom"></i>
-          <span slot="title">我要投诉</span>
+          <span slot="title">在线对话</span>
         </el-menu-item>
+
+<!--        <el-menu-item index="/property/complaintUser">-->
+<!--          <i class="el-icon-s-custom"></i>-->
+<!--          <span slot="title">我要投诉</span>-->
+<!--        </el-menu-item>-->
       </el-submenu>
 
       <el-submenu index="5" >
