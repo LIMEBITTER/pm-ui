@@ -12,6 +12,9 @@
                 <el-form-item prop="confirmPassword">
                     <el-input placeholder="请确认密码" size="medium" style="margin: 5px 0" prefix-icon="el-icon-lock" show-password v-model="role.confirmPassword"></el-input>
                 </el-form-item>
+<!--                <a href="https://gitee.com/oauth/authorize?client_id=068b619f6c8711924ed0494bbf936cd5c8ed8b87999b2bffa614d9ec15298f68&redirect_uri=http://localhost:9444/auth/oauth2/gitee/success&response_type=code">-->
+<!--                  gitee登录-->
+<!--                </a>-->
                 <el-form-item style="margin: 10px 0; text-align: right">
                     <el-button type="primary" size="small"  autocomplete="off" @click="login">登录</el-button>
                     <el-button type="warning" size="small"  autocomplete="off" @click="$router.push('/register')">注册</el-button>

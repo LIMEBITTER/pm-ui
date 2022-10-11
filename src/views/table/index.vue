@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-
     <el-form :inline="true" :model="pageInfo" class="demo-form-inline">
       <el-form-item label="小区名称">
         <el-input v-model="pageInfo.queryString" placeholder="小区名称"></el-input>
@@ -118,7 +117,7 @@ export default {
     return {
       list: null,
       listLoading: false,
-
+      social_user:sessionStorage.getItem('social_user'),
       tableData:[],
       pageInfo:{
         currentPage:1,
@@ -140,6 +139,7 @@ export default {
   created() {
     // this.fetchData()
     this.findPage();
+    console.log('===',this.social_user)
 
   },
   methods: {

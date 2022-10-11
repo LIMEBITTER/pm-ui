@@ -43,8 +43,8 @@
           prop="status"
           label="状态">
         <template v-slot="scope">
-          <div v-if="scope.row.status==0">未受理</div>
-          <div v-else-if="scope.row.status==1">已受理</div>
+          <div v-if="scope.row.status==1">未受理</div>
+          <div v-else-if="scope.row.status==2">已受理</div>
           <div v-else>已回复</div>
 
         </template>
@@ -68,12 +68,12 @@
           <el-button
             size="mini"
             type="primary"
-            v-if="scope.row.status==0"
+            v-if="scope.row.status==1"
             @click="resolveEvent(scope.$index, scope.row)">受理</el-button>
           <el-button
               size="mini"
               type="primary"
-              v-if="scope.row.status==1"
+              v-if="scope.row.status==2"
               @click="showDialog(scope.$index, scope.row)">回复</el-button>
           <el-button
             size="mini"
@@ -224,7 +224,7 @@ export default {
         ownerName:this.form.ownerName,
         descriptionName:this.form.descriptionName,
         reason:this.form.reason,
-        status:1,
+        status:2,
       }
       console.log('===========',param)
       updateComplaint(param).then(function (res){
@@ -261,7 +261,7 @@ export default {
       var param={
         id:this.form.id,
         answer:this.asr.answer,
-        status:2,
+        status:3,
       }
 
       console.log('=====454353453======',param)

@@ -24,11 +24,14 @@
 <!--        label="所属小区"-->
 <!--        width="180">-->
 <!--      </el-table-column>-->
-<!--      <el-table-column-->
-<!--        prop="ownerName"-->
-<!--        label="正在使用的业主">-->
-
-<!--      </el-table-column>-->
+      <el-table-column
+        prop="ownerName"
+        label="正在使用的业主">
+          <template v-slot="scope">
+            <div v-if="scope.row.ownerName==-1">/</div>
+            <div v-else>{{scope.row.ownerName}}</div>
+          </template>
+      </el-table-column>
 <!--      <el-table-column-->
 <!--        prop="picture"-->
 <!--        label="车位图片">-->
@@ -106,11 +109,11 @@
 
     <el-dialog title="新增/编辑停车位信息" :visible.sync="dialogFormVisible" @close="resetForm()">
       <el-form :model="form" ref="formRef">
-        <el-form-item label="所属小区" :label-width="formLabelWidth">
-          <el-select v-model="form.communityId" placeholder="请选择小区" >
-            <el-option v-for="(item,index) in communityNameList" :key="item.id" :label="item.communityName" :value="item.id" ></el-option>
-          </el-select>
-        </el-form-item>
+<!--        <el-form-item label="所属小区" :label-width="formLabelWidth">-->
+<!--          <el-select v-model="form.communityId" placeholder="请选择小区" >-->
+<!--            <el-option v-for="(item,index) in communityNameList" :key="item.id" :label="item.communityName" :value="item.id" ></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
 <!--        <el-form-item label="车位图片" :label-width="formLabelWidth">-->
 <!--          <el-input v-model="form.picture" autocomplete="off"></el-input>-->
 
@@ -163,8 +166,8 @@ export default {
       },
       form:{
         id:'',
-        communityName: '',
-        communityId:0,
+        // communityName: '',
+        // communityId:0,
         // picture:'',
         code:'',
         name:'',
@@ -261,7 +264,7 @@ export default {
         console.log('=========修改==========')
         var param={
           id:this.form.id,
-          communityId:this.form.communityId,
+          // communityId:this.form.communityId,
           // picture:this.form.picture,
           code:this.form.code,
           name:this.form.name,
@@ -286,7 +289,7 @@ export default {
       }else{
         //得到form表单内容，封装为一个新的对象，传递到controller层
         var param={
-          communityId:this.form.communityId,
+          // communityId:this.form.communityId,
           //默认停车位未被使用
           ownerId: -1,
           status:0,

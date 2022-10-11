@@ -105,12 +105,12 @@ const routes = [
     name: 'table',
     meta: { title: '服务管理', icon: 'el-icon-s-help',requireAuth: true },
     children: [
-      // {
-      //   path: 'activity',
-      //   name: 'Activity',
-      //   component: () => import('../views/property/activity.vue'),
-      //   meta: { title: '活动管理', icon: 'table',requireAuth: true }
-      // },
+      {
+        path: 'activity',
+        name: 'Activity',
+        component: () => import('../views/property/activity.vue'),
+        meta: { title: '活动管理', icon: 'table',requireAuth: true }
+      },
       {
         path: 'complaint',
         name: 'Complaint',

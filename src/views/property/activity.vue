@@ -21,11 +21,11 @@
         label="id"
         width="180">
       </el-table-column>
-      <el-table-column
-        prop="communityName"
-        label="所属小区名称"
-        width="180">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="communityName"-->
+<!--        label="所属小区名称"-->
+<!--        width="180">-->
+<!--      </el-table-column>-->
       <el-table-column
         prop="title"
         label="活动标题">
@@ -50,10 +50,10 @@
         label="活动截止时间">
       </el-table-column>
 
-      <el-table-column
-          prop="status"
-          label="状态">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--          prop="status"-->
+<!--          label="状态">-->
+<!--      </el-table-column>-->
 
       <el-table-column label="操作">
         <template slot-scope="scope">

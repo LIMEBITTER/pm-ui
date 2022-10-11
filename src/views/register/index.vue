@@ -57,7 +57,7 @@
                             return false
                         }
                         //传输至后端校验
-                        this.request.post("/community/role/register", this.role).then(res => {
+                        this.request.post("/community/estateManager/register", this.role).then(res => {
                             if(res.code === 20000) {
                                 console.log("role", res.data)
                                 this.$message.success("注册成功")

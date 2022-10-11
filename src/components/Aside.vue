@@ -11,7 +11,7 @@
     >
         <div style="height: 60px; line-height: 60px; text-align: center">
 <!--            <img src="../assets/logo.png" alt="" style="width: 20px; position: relative; top: 5px; right: 5px">-->
-            <b style="color: white" v-show="logoTextShow">物业管理系统</b>
+<!--            <b style="color: white" v-show="logoTextShow">物业管理系统</b>-->
         </div>
 
         <el-submenu index="1">
@@ -35,10 +35,6 @@
                     <i class="el-icon-s-custom"></i>
                     <span slot="title">人员管理</span>
                 </el-menu-item>
-<!--                <el-menu-item index="/owner/car">-->
-<!--                    <i class="el-icon-s-custom"></i>-->
-<!--                    <span slot="title">车辆管理</span>-->
-<!--                </el-menu-item>-->
         </el-submenu>
 
 
@@ -61,10 +57,10 @@
           <span slot="title">服务管理</span>
         </template>
 
-<!--        <el-menu-item index="/property/activity">-->
-<!--          <i class="el-icon-s-custom"></i>-->
-<!--          <span slot="title">活动管理</span>-->
-<!--        </el-menu-item>-->
+        <el-menu-item index="/property/activity">
+          <i class="el-icon-s-custom"></i>
+          <span slot="title">活动管理</span>
+        </el-menu-item>
         <el-menu-item index="/property/complaint">
           <i class="el-icon-s-custom"></i>
           <span slot="title">投诉管理</span>
@@ -74,25 +70,20 @@
           <i class="el-icon-s-custom"></i>
           <span slot="title">在线对话</span>
         </el-menu-item>
+      </el-submenu>
 
-<!--        <el-menu-item index="/property/complaintUser">-->
+<!--      <el-submenu index="5" >-->
+<!--        <template slot="title">-->
+<!--          <i class="el-icon-menu"></i>-->
+<!--          <span slot="title">用户管理</span>-->
+<!--        </template>-->
+
+<!--        <el-menu-item index="/owner/role">-->
 <!--          <i class="el-icon-s-custom"></i>-->
-<!--          <span slot="title">我要投诉</span>-->
+<!--          <span slot="title">注册用户管理</span>-->
 <!--        </el-menu-item>-->
-      </el-submenu>
 
-      <el-submenu index="5" >
-        <template slot="title">
-          <i class="el-icon-menu"></i>
-          <span slot="title">用户管理</span>
-        </template>
-
-        <el-menu-item index="/owner/role">
-          <i class="el-icon-s-custom"></i>
-          <span slot="title">注册用户管理</span>
-        </el-menu-item>
-
-      </el-submenu>
+<!--      </el-submenu>-->
 
 
 
